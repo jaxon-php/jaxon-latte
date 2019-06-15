@@ -1,5 +1,5 @@
 <?php
 
-jaxon()->sentry()->addViewRenderer('latte', function () {
+jaxon()->di()->getViewManager()->addRenderer('latte', function () {
     return new Jaxon\Latte\View();
 });

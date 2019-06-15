@@ -13,7 +13,7 @@
         "source": "https://github.com/jaxon-php/jaxon-latte"
     },
     "require": {
-        "jaxon-php/jaxon-sentry": "~2.0",
+        "jaxon-php/jaxon-core": "dev-develop",
         "latte/latte": "2.2.*|2.3.*|2.4.*"
     },
     "provide": {
