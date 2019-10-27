@@ -3,7 +3,7 @@
 namespace Jaxon\Latte;
 
 use Jaxon\Contracts\View as ViewContract;
-use Jaxon\Ui\View\Store;
+use Jaxon\Utils\View\Store;
 
 class View implements ViewContract
 {
