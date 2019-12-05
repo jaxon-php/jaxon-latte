@@ -4,6 +4,7 @@ namespace Jaxon\Latte;
 
 use Jaxon\Contracts\View as ViewContract;
 use Jaxon\Utils\View\Store;
+use Latte\Engine as TemplateEngine;
 
 class View implements ViewContract
 {
@@ -31,7 +32,7 @@ class View implements ViewContract
         $this->setCurrentNamespace($sNamespace);
 
         // Render the template
-        $xRenderer = new \Latte\Engine;
+        $xRenderer = new TemplateEngine();
         $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
         return trim($xRenderer->renderToString($sTemplateFile, $store->getViewData()), " \t\n");
