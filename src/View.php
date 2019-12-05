@@ -2,18 +2,19 @@
 
 namespace Jaxon\Latte;
 
-use Jaxon\Sentry\Interfaces\View as ViewInterface;
-use Jaxon\Sentry\View\Store;
+use Jaxon\Contracts\View as ViewContract;
+use Jaxon\Utils\View\Store;
+use Latte\Engine as TemplateEngine;
 
-class View implements ViewInterface
+class View implements ViewContract
 {
-    use \Jaxon\Sentry\View\Namespaces;
+    use \Jaxon\Features\View\Namespaces;
 
     /**
      * Render a view
-     * 
+     *
      * @param Store         $store        A store populated with the view data
-     * 
+     *
      * @return string        The string representation of the view
      */
     public function render(Store $store)
@@ -31,7 +32,7 @@ class View implements ViewInterface
         $this->setCurrentNamespace($sNamespace);
 
         // Render the template
-        $xRenderer = new \Latte\Engine;
+        $xRenderer = new TemplateEngine();
         $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
         return trim($xRenderer->renderToString($sTemplateFile, $store->getViewData()), " \t\n");
