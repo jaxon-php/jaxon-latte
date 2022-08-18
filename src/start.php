@@ -1,5 +1,5 @@
 <?php
 
-Jaxon\jaxon()->di()->getViewManager()->addRenderer('latte', function () {
+Jaxon\jaxon()->di()->getViewRenderer()->addRenderer('latte', function() {
     return new Jaxon\Latte\View();
 });
