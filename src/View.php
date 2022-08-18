@@ -2,20 +2,21 @@
 
 namespace Jaxon\Latte;
 
-use Jaxon\Contracts\View as ViewContract;
-use Jaxon\Utils\View\Store;
+use Jaxon\App\View\Store;
+use Jaxon\App\View\ViewInterface;
+use Jaxon\App\View\ViewTrait;
 use Latte\Engine as TemplateEngine;
 
-class View implements ViewContract
+class View implements ViewInterface
 {
-    use \Jaxon\Features\View\Namespaces;
+    use ViewTrait;
 
     /**
      * Render a view
      *
-     * @param Store         $store        A store populated with the view data
+     * @param Store $store    A store populated with the view data
      *
-     * @return string        The string representation of the view
+     * @return string
      */
     public function render(Store $store)
     {
