@@ -5,11 +5,14 @@ namespace Jaxon\Latte;
 use Jaxon\App\View\Store;
 use Jaxon\App\View\ViewInterface;
 use Jaxon\App\View\ViewTrait;
-use Latte\Engine as TemplateEngine;
+use Jaxon\JsCall\JsExpr;
+use Jaxon\JsCall\JsFactory;
+use Latte\Engine as LatteEngine;
 
 use function substr;
 use function strlen;
 use function trim;
+use function Jaxon\attr;
 
 class View implements ViewInterface
 {
@@ -37,7 +40,13 @@ class View implements ViewInterface
         $this->setCurrentNamespace($sNamespace);
 
         // Render the template
-        $xRenderer = new TemplateEngine();
+        $xRenderer = new LatteEngine();
+        // Functions and filters for custom Jaxon attributes
+        $xRenderer->addFunction('jxnFunc', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
+        $xRenderer->addFunction('jxnShow', fn(JsFactory $xJsFactory) => attr()->show($xJsFactory));
+        $xRenderer->addFilter('jxnFunc', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
+        $xRenderer->addFilter('jxnShow', fn(JsFactory $xJsFactory) => attr()->show($xJsFactory));
+
         $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
         return trim($xRenderer->renderToString($sTemplateFile, $store->getViewData()), " \t\n");

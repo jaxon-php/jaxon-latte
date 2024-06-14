@@ -14,7 +14,7 @@
     },
     "require": {
         "jaxon-php/jaxon-core": "v5.x-dev",
-        "latte/latte": ">=2.2"
+        "latte/latte": "^3.0"
     },
     "provide": {
         "jaxon-php/jaxon-view-latte": "v5.x-dev"
