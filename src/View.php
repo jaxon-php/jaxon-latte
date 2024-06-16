@@ -5,8 +5,8 @@ namespace Jaxon\Latte;
 use Jaxon\App\View\Store;
 use Jaxon\App\View\ViewInterface;
 use Jaxon\App\View\ViewTrait;
-use Jaxon\JsCall\JsExpr;
-use Jaxon\JsCall\JsFactory;
+use Jaxon\Script\JsCall;
+use Jaxon\Script\JsExpr;
 use Latte\Engine as LatteEngine;
 
 use function substr;
@@ -43,9 +43,9 @@ class View implements ViewInterface
         $xRenderer = new LatteEngine();
         // Functions and filters for custom Jaxon attributes
         $xRenderer->addFunction('jxnFunc', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
-        $xRenderer->addFunction('jxnShow', fn(JsFactory $xJsFactory) => attr()->show($xJsFactory));
+        $xRenderer->addFunction('jxnShow', fn(JsCall $xJsCall) => attr()->show($xJsCall));
         $xRenderer->addFilter('jxnFunc', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
-        $xRenderer->addFilter('jxnShow', fn(JsFactory $xJsFactory) => attr()->show($xJsFactory));
+        $xRenderer->addFilter('jxnShow', fn(JsCall $xJsCall) => attr()->show($xJsCall));
 
         $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
