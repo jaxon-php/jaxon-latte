@@ -8,6 +8,7 @@ use Jaxon\App\View\ViewTrait;
 use Jaxon\Script\JsExpr;
 use Jaxon\Script\JxnCall;
 use Latte\Engine as LatteEngine;
+use Latte\Runtime\Html;
 
 use function substr;
 use function strlen;
@@ -46,12 +47,15 @@ class View implements ViewInterface
         // Render the template
         $xRenderer = new LatteEngine();
 
+        // Some attributes are wrapped in the Html object, so there are not escaped twice.
+        // See https://latte.nette.org/en/develop#toc-disabling-auto-escaping-of-variable
+
         // Filters for custom Jaxon attributes
-        $xRenderer->addFilter('func', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
+        $xRenderer->addFilter('func', fn(JsExpr $xJsExpr) => new Html(attr()->func($xJsExpr)));
         $xRenderer->addFilter('show', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
 
         // Functions for custom Jaxon attributes
-        $xRenderer->addFunction('func', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
+        $xRenderer->addFunction('func', fn(JsExpr $xJsExpr) => new Html(attr()->func($xJsExpr)));
         $xRenderer->addFunction('show', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
         $xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
         $xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
