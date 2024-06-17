@@ -1,4 +1,8 @@
 # Do not commit Eclipse files
 .project
 .settings/*
-/jaxon-core.komodoproject
+.idea/
+vendor/
+composer.lock
+build/
+.phpunit.result.cache

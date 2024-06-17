@@ -5,14 +5,18 @@ namespace Jaxon\Latte;
 use Jaxon\App\View\Store;
 use Jaxon\App\View\ViewInterface;
 use Jaxon\App\View\ViewTrait;
-use Jaxon\Script\JsCall;
 use Jaxon\Script\JsExpr;
+use Jaxon\Script\JxnCall;
 use Latte\Engine as LatteEngine;
 
 use function substr;
 use function strlen;
 use function trim;
 use function Jaxon\attr;
+use function Jaxon\jq;
+use function Jaxon\js;
+use function Jaxon\pm;
+use function Jaxon\rq;
 
 class View implements ViewInterface
 {
@@ -41,11 +45,18 @@ class View implements ViewInterface
 
         // Render the template
         $xRenderer = new LatteEngine();
-        // Functions and filters for custom Jaxon attributes
-        $xRenderer->addFunction('jxnFunc', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
-        $xRenderer->addFunction('jxnShow', fn(JsCall $xJsCall) => attr()->show($xJsCall));
-        $xRenderer->addFilter('jxnFunc', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
-        $xRenderer->addFilter('jxnShow', fn(JsCall $xJsCall) => attr()->show($xJsCall));
+
+        // Filters for custom Jaxon attributes
+        $xRenderer->addFilter('func', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
+        $xRenderer->addFilter('show', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
+
+        // Functions for custom Jaxon attributes
+        $xRenderer->addFunction('func', fn(JsExpr $xJsExpr) => attr()->func($xJsExpr));
+        $xRenderer->addFunction('show', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
+        $xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
+        $xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
+        $xRenderer->addFunction('pm', fn(...$aParams) => pm(...$aParams));
+        $xRenderer->addFunction('rq', fn(...$aParams) => rq(...$aParams));
 
         $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
