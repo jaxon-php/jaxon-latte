@@ -59,8 +59,8 @@ class View implements ViewInterface
         $xRenderer->addFunction('show', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
         $xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
         $xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
-        $xRenderer->addFunction('pm', fn(...$aParams) => pm(...$aParams));
         $xRenderer->addFunction('rq', fn(...$aParams) => rq(...$aParams));
+        $xRenderer->addFunction('pm', fn() => pm());
 
         $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
