@@ -51,16 +51,17 @@ class View implements ViewInterface
         // See https://latte.nette.org/en/develop#toc-disabling-auto-escaping-of-variable
 
         // Filters for custom Jaxon attributes
-        $xRenderer->addFilter('func', fn(JsExpr $xJsExpr) => new Html(attr()->func($xJsExpr)));
-        $xRenderer->addFilter('show', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
+        $xRenderer->addFilter('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
+        $xRenderer->addFilter('jxnShow', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
+        $xRenderer->addFilter('jxnTarget', fn(string $name = '') => attr()->target($name));
+        $xRenderer->addFilter('jxnOn', fn(string|array $on, JsExpr $xJsExpr, array $options = []) =>
+            new Html(attr()->on($on, $xJsExpr, $options)));
 
         // Functions for custom Jaxon attributes
-        $xRenderer->addFunction('func', fn(JsExpr $xJsExpr) => new Html(attr()->func($xJsExpr)));
-        $xRenderer->addFunction('show', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
         $xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
         $xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
-        $xRenderer->addFunction('pm', fn(...$aParams) => pm(...$aParams));
         $xRenderer->addFunction('rq', fn(...$aParams) => rq(...$aParams));
+        $xRenderer->addFunction('pm', fn() => pm());
 
         $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
