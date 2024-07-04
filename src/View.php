@@ -52,12 +52,15 @@ class View implements ViewInterface
 
         // Filters for custom Jaxon attributes
         $xRenderer->addFilter('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
-        $xRenderer->addFilter('jxnShow', fn(JxnCall $xJxnCall) => attr()->show($xJxnCall));
-        $xRenderer->addFilter('jxnTarget', fn(string $name = '') => attr()->target($name));
-        $xRenderer->addFilter('jxnOn', fn(string|array $on, JsExpr $xJsExpr, array $options = []) =>
-            new Html(attr()->on($on, $xJsExpr, $options)));
+        $xRenderer->addFilter('jxnShow', fn(JxnCall $xJxnCall) => new Html(attr()->show($xJxnCall)));
 
         // Functions for custom Jaxon attributes
+        $xRenderer->addFunction('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
+        $xRenderer->addFunction('jxnShow', fn(JxnCall $xJxnCall) => new Html(attr()->show($xJxnCall)));
+        $xRenderer->addFunction('jxnTarget', fn(string $name = '') => new Html(attr()->target($name)));
+        $xRenderer->addFunction('jxnOn', fn(string|array $on, JsExpr $xJsExpr, array $options = []) =>
+            new Html(attr()->on($on, $xJsExpr, $options)));
+
         $xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
         $xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
         $xRenderer->addFunction('rq', fn(...$aParams) => rq(...$aParams));
