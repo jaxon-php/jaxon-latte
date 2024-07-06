@@ -10,18 +10,56 @@ use Jaxon\Script\JxnCall;
 use Latte\Engine as LatteEngine;
 use Latte\Runtime\Html;
 
-use function substr;
-use function strlen;
-use function trim;
 use function Jaxon\attr;
 use function Jaxon\jq;
 use function Jaxon\js;
 use function Jaxon\pm;
 use function Jaxon\rq;
+use function substr;
+use function strlen;
+use function trim;
 
 class View implements ViewInterface
 {
     use ViewTrait;
+
+    /**
+     * @var LatteEngine|null
+     */
+    private ?LatteEngine $xRenderer = null;
+
+    /**
+     * @return LatteEngine
+     */
+    private function _renderer(): LatteEngine
+    {
+        if(!$this->xRenderer)
+        {
+            // Render the template
+            $this->xRenderer = new LatteEngine();
+            $this->xRenderer->setTempDirectory(__DIR__ . '/../cache');
+
+            // Some attributes are wrapped in the Html object, so there are not escaped twice.
+            // See https://latte.nette.org/en/develop#toc-disabling-auto-escaping-of-variable
+
+            // Filters for custom Jaxon attributes
+            $this->xRenderer->addFilter('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
+            $this->xRenderer->addFilter('jxnShow', fn(JxnCall $xJxnCall) => new Html(attr()->show($xJxnCall)));
+
+            // Functions for custom Jaxon attributes
+            $this->xRenderer->addFunction('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
+            $this->xRenderer->addFunction('jxnShow', fn(JxnCall $xJxnCall) => new Html(attr()->show($xJxnCall)));
+            $this->xRenderer->addFunction('jxnTarget', fn(string $name = '') => new Html(attr()->target($name)));
+            $this->xRenderer->addFunction('jxnOn', fn(string|array $on, JsExpr $xJsExpr, array $options = []) =>
+                new Html(attr()->on($on, $xJsExpr, $options)));
+
+            $this->xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
+            $this->xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
+            $this->xRenderer->addFunction('rq', fn(...$aParams) => rq(...$aParams));
+            $this->xRenderer->addFunction('pm', fn() => pm());
+        }
+        return $this->xRenderer;
+    }
 
     /**
      * Render a view
@@ -44,30 +82,7 @@ class View implements ViewInterface
         // View namespace
         $this->setCurrentNamespace($sNamespace);
 
-        // Render the template
-        $xRenderer = new LatteEngine();
-
-        // Some attributes are wrapped in the Html object, so there are not escaped twice.
-        // See https://latte.nette.org/en/develop#toc-disabling-auto-escaping-of-variable
-
-        // Filters for custom Jaxon attributes
-        $xRenderer->addFilter('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
-        $xRenderer->addFilter('jxnShow', fn(JxnCall $xJxnCall) => new Html(attr()->show($xJxnCall)));
-
-        // Functions for custom Jaxon attributes
-        $xRenderer->addFunction('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
-        $xRenderer->addFunction('jxnShow', fn(JxnCall $xJxnCall) => new Html(attr()->show($xJxnCall)));
-        $xRenderer->addFunction('jxnTarget', fn(string $name = '') => new Html(attr()->target($name)));
-        $xRenderer->addFunction('jxnOn', fn(string|array $on, JsExpr $xJsExpr, array $options = []) =>
-            new Html(attr()->on($on, $xJsExpr, $options)));
-
-        $xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
-        $xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
-        $xRenderer->addFunction('rq', fn(...$aParams) => rq(...$aParams));
-        $xRenderer->addFunction('pm', fn() => pm());
-
-        $xRenderer->setTempDirectory(__DIR__ . '/../cache');
         $sTemplateFile = $this->sDirectory . $sViewName . $this->sExtension;
-        return trim($xRenderer->renderToString($sTemplateFile, $store->getViewData()), " \t\n");
+        return trim($this->_renderer()->renderToString($sTemplateFile, $store->getViewData()), " \t\n");
     }
 }
