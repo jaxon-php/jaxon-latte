@@ -11,6 +11,7 @@ use Latte\Engine as LatteEngine;
 use Latte\Runtime\Html;
 
 use function Jaxon\attr;
+use function Jaxon\jaxon;
 use function Jaxon\jq;
 use function Jaxon\js;
 use function Jaxon\pm;
@@ -57,6 +58,11 @@ class View implements ViewInterface
             $this->xRenderer->addFunction('js', fn(...$aParams) => js(...$aParams));
             $this->xRenderer->addFunction('rq', fn(...$aParams) => rq(...$aParams));
             $this->xRenderer->addFunction('pm', fn() => pm());
+
+            // Functions for Jaxon js and CSS codes
+            $this->xRenderer->addFunction('jxnCss', fn() => new Html(jaxon()->css()));
+            $this->xRenderer->addFunction('jxnJs', fn() => new Html(jaxon()->js()));
+            $this->xRenderer->addFunction('jxnScript', fn() => new Html(jaxon()->script()));
         }
         return $this->xRenderer;
     }
