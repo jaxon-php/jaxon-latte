@@ -44,22 +44,28 @@ class View implements ViewInterface
             // See https://latte.nette.org/en/develop#toc-disabling-auto-escaping-of-variable
 
             // Filters for custom Jaxon attributes
-            $this->xRenderer->addFilter('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
+            $this->xRenderer->addFilter('jxnHtml', fn(JxnCall $xJxnCall) =>
+                new Html(attr()->html($xJxnCall)));
             $this->xRenderer->addFilter('jxnShow', fn(JxnCall $xJxnCall, string $item = '') =>
                 new Html(attr()->show($xJxnCall, $item)));
-            $this->xRenderer->addFilter('jxnOn', fn(JsExpr $xJsExpr, string|array $on, array $options = []) =>
-                new Html(attr()->on($on, $xJsExpr, $options)));
-            $this->xRenderer->addFilter('jxnClick', fn(JsExpr $xJsExpr, array $options = []) =>
-                new Html(attr()->click($xJsExpr, $options)));
+            $this->xRenderer->addFilter('jxnOn', fn(JsExpr $xJsExpr, string|array $on) =>
+                new Html(attr()->on($on, $xJsExpr)));
+            $this->xRenderer->addFilter('jxnClick', fn(JsExpr $xJsExpr) =>
+                new Html(attr()->click($xJsExpr)));
+            $this->xRenderer->addFilter('jxnEvent', fn(JsExpr $xJsExpr, array $on) =>
+                new Html(attr()->event($on, $xJsExpr)));
 
             // Functions for custom Jaxon attributes
-            $this->xRenderer->addFunction('jxnHtml', fn(JxnCall $xJxnCall) => new Html(attr()->html($xJxnCall)));
+            $this->xRenderer->addFunction('jxnHtml', fn(JxnCall $xJxnCall) =>
+                new Html(attr()->html($xJxnCall)));
             $this->xRenderer->addFunction('jxnShow', fn(JxnCall $xJxnCall, string $item = '') =>
                 new Html(attr()->show($xJxnCall, $item)));
-            $this->xRenderer->addFunction('jxnOn', fn(string|array $on, JsExpr $xJsExpr, array $options = []) =>
-                new Html(attr()->on($on, $xJsExpr, $options)));
-            $this->xRenderer->addFunction('jxnClick', fn(JsExpr $xJsExpr, array $options = []) =>
-                new Html(attr()->click($xJsExpr, $options)));
+            $this->xRenderer->addFunction('jxnOn', fn(string|array $on, JsExpr $xJsExpr) =>
+                new Html(attr()->on($on, $xJsExpr)));
+            $this->xRenderer->addFunction('jxnClick', fn(JsExpr $xJsExpr) =>
+                new Html(attr()->click($xJsExpr)));
+            $this->xRenderer->addFunction('jxnEvent', fn(array $on, JsExpr $xJsExpr) =>
+                new Html(attr()->event($on, $xJsExpr)));
             $this->xRenderer->addFunction('jxnTarget', fn(string $name = '') => new Html(attr()->target($name)));
 
             $this->xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
