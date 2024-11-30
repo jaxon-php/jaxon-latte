@@ -46,8 +46,8 @@ class View implements ViewInterface
             // Filters for custom Jaxon attributes
             $this->xRenderer->addFilter('jxnHtml', fn(JxnCall $xJxnCall) =>
                 new Html(attr()->html($xJxnCall)));
-            $this->xRenderer->addFilter('jxnShow', fn(JxnCall $xJxnCall, string $item = '') =>
-                new Html(attr()->show($xJxnCall, $item)));
+            $this->xRenderer->addFilter('jxnBind', fn(JxnCall $xJxnCall, string $item = '') =>
+                new Html(attr()->bind($xJxnCall, $item)));
             $this->xRenderer->addFilter('jxnOn', fn(JsExpr $xJsExpr, string|array $on) =>
                 new Html(attr()->on($on, $xJsExpr)));
             $this->xRenderer->addFilter('jxnClick', fn(JsExpr $xJsExpr) =>
@@ -58,8 +58,8 @@ class View implements ViewInterface
             // Functions for custom Jaxon attributes
             $this->xRenderer->addFunction('jxnHtml', fn(JxnCall $xJxnCall) =>
                 new Html(attr()->html($xJxnCall)));
-            $this->xRenderer->addFunction('jxnShow', fn(JxnCall $xJxnCall, string $item = '') =>
-                new Html(attr()->show($xJxnCall, $item)));
+            $this->xRenderer->addFunction('jxnBind', fn(JxnCall $xJxnCall, string $item = '') =>
+                new Html(attr()->bind($xJxnCall, $item)));
             $this->xRenderer->addFunction('jxnOn', fn(string|array $on, JsExpr $xJsExpr) =>
                 new Html(attr()->on($on, $xJsExpr)));
             $this->xRenderer->addFunction('jxnClick', fn(JsExpr $xJsExpr) =>
