@@ -48,6 +48,8 @@ class View implements ViewInterface
                 new Html(attr()->html($xJxnCall)));
             $this->xRenderer->addFilter('jxnBind', fn(JxnCall $xJxnCall, string $item = '') =>
                 new Html(attr()->bind($xJxnCall, $item)));
+            $this->xRenderer->addFilter('jxnPagination', fn(JxnCall $xJxnCall) =>
+                new Html(attr()->pagination($xJxnCall)));
             $this->xRenderer->addFilter('jxnOn', fn(JsExpr $xJsExpr, string|array $on) =>
                 new Html(attr()->on($on, $xJsExpr)));
             $this->xRenderer->addFilter('jxnClick', fn(JsExpr $xJsExpr) =>
@@ -60,6 +62,8 @@ class View implements ViewInterface
                 new Html(attr()->html($xJxnCall)));
             $this->xRenderer->addFunction('jxnBind', fn(JxnCall $xJxnCall, string $item = '') =>
                 new Html(attr()->bind($xJxnCall, $item)));
+            $this->xRenderer->addFunction('jxnPagination', fn(JxnCall $xJxnCall) =>
+                new Html(attr()->pagination($xJxnCall)));
             $this->xRenderer->addFunction('jxnOn', fn(string|array $on, JsExpr $xJsExpr) =>
                 new Html(attr()->on($on, $xJsExpr)));
             $this->xRenderer->addFunction('jxnClick', fn(JsExpr $xJsExpr) =>
