@@ -43,10 +43,10 @@ class MyClass extends \Jaxon\App\FuncComponent
 }
 ```
 
-Twig functions
---------------
+Template functions
+------------------
 
-This extension provides the following Twig functions to insert Jaxon js and css codes in the pages that need to show Jaxon related content.
+This extension provides the following template functions to insert Jaxon js and css codes in the pages that need to show Jaxon related content.
 
 ```php
 // /path/to/demo/views/sub/dir/file.latte
@@ -70,23 +70,23 @@ This extension provides the following Twig functions to insert Jaxon js and css 
 Call factories
 --------------
 
-This extension registers the following Twig functions for Jaxon [call factories](https://www.jaxon-php.org/docs/v5x/ui-features/call-factories.html) functions.
+This extension registers the following template functions for Jaxon [call factories](https://www.jaxon-php.org/docs/v5x/ui-features/call-factories.html).
 
 > [!NOTE]
-> In the following examples, the `rqAppTest` template variable is set to the value `rq(Demo\Ajax\App\AppTest::class)`.
+> In the following examples, the `$rqAppTest` template variable is set to the value `rq(Demo\Ajax\App\AppTest::class)`.
 
 The `jxnBind` function attaches a UI component to a DOM element, while the `jxnHtml` function displays a component HTML code in a view.
 
 ```php
-    <div class="col-md-12" {jxnBind(rqAppTest)}>
-        {jxnHtml(rqAppTest)}
+    <div class="col-md-12" {jxnBind($rqAppTest)}>
+        {jxnHtml($rqAppTest)}
     </div>
 ```
 
 The `jxnPagination` function displays pagination links in a view.
 
 ```php
-    <div class="col-md-12" {jxnPagination(rqAppTest)}>
+    <div class="col-md-12" {jxnPagination($rqAppTest)}>
     </div>
 ```
 
@@ -94,7 +94,7 @@ The `jxnOn` function binds an event on a DOM element to a Javascript call define
 
 ```php
     <select class="form-select"
-        {jxnOn('change', rqAppTest.setColor(jq().val()))}>
+        {jxnOn('change', $rqAppTest->setColor(jq().val()))}>
         <option value="black" selected="selected">Black</option>
         <option value="red">Red</option>
         <option value="green">Green</option>
@@ -106,15 +106,15 @@ The `jxnClick` function is a shortcut to define a handler for the `click` event.
 
 ```php
     <button type="button" class="btn btn-primary"
-        {jxnClick(rqAppTest.sayHello(true))}>Click me</button>
+        {jxnClick($rqAppTest->sayHello(true))}>Click me</button>
 ```
 
 The `jxnEvent` function defines a set of events handlers on the children of a DOM element, using `jQuery` selectors.
 
 ```php
     <div class="row" {jxnEvent([
-        ['.app-color-choice', 'change', rqAppTest.setColor(jq().val())]
-        ['.ext-color-choice', 'change', rqExtTest.setColor(jq().val())]
+        ['.app-color-choice', 'change', $rqAppTest->setColor(jq().val())]
+        ['.ext-color-choice', 'change', $rqExtTest->setColor(jq().val())]
     ])}>
         <div class="col-md-12">
             <select class="form-control app-color-choice">
