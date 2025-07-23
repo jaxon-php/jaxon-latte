@@ -81,6 +81,8 @@ class View implements ViewInterface
                 new Html(attr()->click($xJsExpr)));
             $this->xRenderer->addFunction('jxnEvent', fn(array $events) =>
                 new Html($this->setJxnEvent($events)));
+            $this->xRenderer->addFunction('jxnPackage', fn(string $sClass, string $sCode = 'html') =>
+                new Html(attr()->package($sClass, $sCode)));
 
             $this->xRenderer->addFunction('jq', fn(...$aParams) => jq(...$aParams));
             $this->xRenderer->addFunction('je', fn(...$aParams) => je(...$aParams));
